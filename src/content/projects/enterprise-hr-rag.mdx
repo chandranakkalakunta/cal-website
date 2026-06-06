@@ -1,0 +1,62 @@
+---
+title: "Enterprise HR RAG Platform"
+tagline: "Production-grade retrieval system for HR policy and personalized employee Q&A on GCP"
+status: "Live · RAGAS-evaluated · demo available"
+featured: true
+order: 1
+problem: "Employees waste time hunting through scattered HR policy documents and HR teams field the same questions repeatedly. A naive chatbot is worse than useless here — it confidently invents policy. The real problem is answering both general policy questions and personalized, employee-specific ones (leave balance, eligibility) accurately, with sources, and without ever leaking one employee's data to another."
+pillars:
+  iac: "Fully reproducible on GCP, provisioned as code across 14 scripts. Cloud Run serving, Cloud SQL for the HR database, Vertex AI Vector Search for retrieval, and a two-level response cache (in-memory + Firestore) to cut repeat-query cost and latency."
+  security: "Security and compliance built in, not bolted on: Google OAuth, CMEK with Cloud KMS (RSA-4096), Binary Authorization, four least-privilege service accounts, and a VPC with private subnets and Cloud NAT. Privacy-compliant by design (GDPR, India DPDP Act 2023) — analytics in BigQuery store only SHA-256-hashed IDs and category metadata, never PII, questions, or answer text."
+  performance: "Answer quality is measured, not assumed. RAGAS evaluation across 60 questions improved answer relevancy from 0.674 to 0.857 with 0.967 source accuracy — and that score is enforced in CI/CD by an automated quality gate that blocks any deploy scoring below 0.80. Caching reduces cost and response time on repeat queries."
+  innovation: "Hybrid retrieval: BM25 keyword search fused with Vertex AI Vector Search (3072-dim) via Reciprocal Rank Fusion, so the system catches both exact-term matches and semantic meaning. An intent-detection query router sends personal, policy, and hybrid questions to the right source — the Cloud SQL HR database for personalized answers, document retrieval for policy — which is what lets one system answer both 'what is the parental leave policy' and 'how much leave do I have left.'"
+architectureNote: "The core design decision was hybrid retrieval with a router. Pure vector search misses exact policy terms; pure keyword search misses meaning. Reciprocal Rank Fusion combines both rankings without needing them on the same scale. The query router sits in front and decides, per question, whether the answer lives in the HR database, the policy documents, or both — which is what turns a generic document-Q&A bot into something that handles personalized employee questions safely."
+outcome: "Answer relevancy lifted from 0.674 to 0.857 (RAGAS, 60 questions) at 0.967 source accuracy, with a CI/CD quality gate that refuses to ship regressions below 0.80. Full security and privacy posture (CMEK, least-privilege IAM, PII-free analytics) and a 10-step Cloud Build pipeline with parallel test and security gates. The architecture generalizes beyond HR — the same hybrid-retrieval-plus-router pattern is a reference design for enterprise search across departments."
+stack:
+  - "GCP"
+  - "Cloud Run"
+  - "Vertex AI Vector Search"
+  - "Cloud SQL"
+  - "BigQuery"
+  - "Cloud KMS (CMEK)"
+  - "Firestore"
+  - "BM25 + RRF"
+  - "RAGAS"
+  - "Cloud Build CI/CD"
+  - "Python"
+links:
+  github: "https://github.com/chandranakkalakunta/enterprise-hr-rag"
+  live: "https://hr-rag-engine-946703664996.asia-south1.run.app"
+---
+
+## What it is
+
+Most "chat with your documents" demos fall apart in an enterprise HR setting for two reasons. First, they hallucinate — and confidently wrong HR policy is a liability, not a feature. Second, they only handle generic questions ("what's the leave policy") and have no safe way to answer personal ones ("how much leave do *I* have"), because that requires reaching into employee data without leaking it across users.
+
+This platform was built to solve both. It's a production-grade retrieval system that answers HR policy questions *and* personalized employee questions, always with sources, with the security and privacy controls a real deployment requires.
+
+## The core design decision
+
+The heart of the system is **hybrid retrieval with an intent router**.
+
+Pure vector (semantic) search is good at meaning but misses exact policy terminology. Pure keyword search (BM25) catches exact terms but misses meaning. So the system runs both and fuses the results with Reciprocal Rank Fusion — a method that combines two rankings without needing their scores on the same scale. You get exact-term precision and semantic recall together.
+
+In front of that sits a query router that detects intent. A policy question goes to document retrieval. A personalized question ("my leave balance") goes to the Cloud SQL HR database. A hybrid question draws from both. This router is what separates a generic document bot from a system that can safely answer employee-specific questions — and it's where the per-user data isolation is enforced.
+
+![HR-RAG query flow: an employee query passes through an intent router, which sends personal questions to the Cloud SQL HR database and policy questions to hybrid retrieval — BM25 keyword search and Vertex AI vector search, fused by Reciprocal Rank Fusion — producing a grounded, cited answer. A separate PII-free branch logs only hashed IDs and category metadata to BigQuery.](/images/hr-rag-architecture.svg)
+
+## Why the evaluation matters
+
+It's easy to build a RAG demo that *looks* good. It's hard to know whether it's actually accurate — and in HR, accuracy is the whole point. So answer quality is measured with RAGAS across a fixed set of 60 questions. The build improved relevancy from 0.674 to 0.857 with 0.967 source accuracy, and — the part I care about most — that score is wired into CI/CD as a quality gate. Any change that drops answer quality below 0.80 fails the build and never ships. The system can't silently regress.
+
+## Analytics without the privacy cost
+
+Understanding how the system is used — which categories of questions come up, where answers fall short — is operationally valuable, but in HR it's also a privacy minefield. The solution is to log to BigQuery while storing *only* SHA-256-hashed identifiers and category metadata: never the PII, never the question text, never the answer. You get the usage analytics that let you improve the system, with nothing that could expose an individual employee. Privacy-by-design and operational visibility aren't in tension when you log the right thing.
+
+## Enhancements along the way
+
+A few extensions beyond the base retrieval system, each driven by what the RAGAS scores and real usage exposed: handling images and tables in source documents (not just plain text), tuning the balance between keyword and semantic retrieval, and tuning chunk size — the unglamorous, measurable work that moves answer quality. The deeper methodology behind these is its own topic; here it's enough to say the tuning was driven by evaluation, not guesswork.
+
+## Beyond HR
+
+Nothing about the hybrid-retrieval-plus-router pattern is specific to HR. The same architecture — fuse keyword and semantic search, route by intent, enforce quality in CI/CD, keep analytics PII-free — is a reference design for **enterprise search across any department**. HR was the first, well-scoped problem to prove it on.
