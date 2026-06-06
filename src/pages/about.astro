@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="About"
+  description="Twenty years of enterprise systems, hands-on with the newest cloud and AI tooling."
+>
+  <div class="mx-auto max-w-3xl px-6 py-20">
+
+    <h1 class="text-4xl font-bold text-slate-100 mb-10">About</h1>
+
+    <!-- Opening — verbatim from brief -->
+    <p class="text-xl text-slate-300 leading-relaxed mb-16 border-l-2 border-sky-400 pl-6">
+      There's a persistent gap in this field: senior architects who no longer
+      build, and AI practitioners who've never run anything in production. I work
+      in the space between — two decades of enterprise systems, hands-on with the
+      newest cloud and AI tooling, turning emerging technology into systems that
+      survive contact with reality.
+    </p>
+
+    <!-- Twenty-year arc -->
+    <section class="mb-16">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-8">
+        The Arc
+      </h2>
+      <div class="space-y-10">
+        {[
+          {
+            period: 'Now',
+            role:    'Principal Cloud & AI/ML Architect',
+            desc:    'Building production AI systems end-to-end: ML pipelines with explainability, agentic architectures, RAG systems — all instrumented and validated against real workloads on GCP.',
+          },
+          {
+            period: '2010–2024',
+            role:    'Enterprise Cloud Architecture',
+            desc:    'Led cloud migration and platform architecture programs across FinTech, healthcare, and retail. Designed systems for scale, compliance, and operational resilience.',
+          },
+          {
+            period: '2005–2010',
+            role:    'Distributed Systems & Platform Engineering',
+            desc:    'Built the foundational systems layer: distributed data pipelines, service meshes, and the internal platforms that larger applications ran on top of.',
+          },
+        ].map(item => (
+          <div class="grid grid-cols-[7rem,1fr] gap-6 items-start">
+            <span class="font-mono text-sm text-slate-600 text-right pt-0.5 leading-tight">
+              {item.period}
+            </span>
+            <div>
+              <h3 class="text-slate-200 font-semibold mb-1.5">{item.role}</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section>
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-6">
+        Certifications
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {[
+          { name: 'Professional Cloud Architect',    issuer: 'Google Cloud' },
+          { name: 'Professional ML Engineer',        issuer: 'Google Cloud' },
+        ].map(cert => (
+          <div class="border border-slate-800 rounded-lg p-4 bg-slate-900/30">
+            <p class="text-slate-200 font-medium text-sm">{cert.name}</p>
+            <p class="text-slate-500 text-xs font-mono mt-1">{cert.issuer}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </div>
+</Base>

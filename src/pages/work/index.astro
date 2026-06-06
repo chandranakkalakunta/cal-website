@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = await getCollection('projects', ({ data }) => !data.draft);
+projects.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<Base
+  title="Work"
+  description="Production AI and cloud architecture projects — instrumented, validated, built to enterprise standards."
+>
+  <div class="mx-auto max-w-5xl px-6 py-20">
+    <h1 class="text-4xl font-bold text-slate-100 mb-4">Work</h1>
+    <p class="text-slate-400 text-lg mb-12 max-w-2xl">
+      Each project is a complete production system — instrumented, validated,
+      and built to the same standards I'd apply in a GCC engagement.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {projects.map(project => <ProjectCard project={project} />)}
+    </div>
+  </div>
+</Base>

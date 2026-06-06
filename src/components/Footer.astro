@@ -1,0 +1,28 @@
+---
+import { SITE } from '../config/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-slate-800 py-8 mt-20">
+  <div class="mx-auto max-w-5xl px-6 flex items-center justify-between text-sm text-slate-500">
+    <span>© {year} {SITE.owner}</span>
+    <div class="flex items-center gap-6">
+      <a
+        href={SITE.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-slate-300 transition-colors"
+      >
+        GitHub
+      </a>
+      <a
+        href={SITE.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-slate-300 transition-colors"
+      >
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</footer>

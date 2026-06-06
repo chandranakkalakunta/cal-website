@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/site';
+
+const links = [
+  {
+    label:    'Email',
+    display:  SITE.email,
+    href:     `mailto:${SITE.email}`,
+    external: false,
+    arrow:    '→',
+  },
+  {
+    label:    'GitHub',
+    display:  SITE.github,
+    href:     SITE.github,
+    external: true,
+    arrow:    '→',
+  },
+  {
+    label:    'LinkedIn',
+    display:  SITE.linkedin,
+    href:     SITE.linkedin,
+    external: true,
+    arrow:    '→',
+  },
+  {
+    label:    'Resume',
+    display:  'Download PDF',
+    href:     SITE.resumePdf,
+    external: true,
+    arrow:    '↓',
+  },
+];
+---
+
+<Base title="Contact" description="Get in touch with Chandra Nakkalakunta.">
+  <div class="mx-auto max-w-2xl px-6 py-20">
+
+    <h1 class="text-4xl font-bold text-slate-100 mb-4">Contact</h1>
+    <p class="text-slate-400 text-lg mb-12">
+      I'm reachable through the channels below.
+    </p>
+
+    <div class="space-y-3">
+      {links.map(link => (
+        <a
+          href={link.href}
+          target={link.external ? '_blank' : undefined}
+          rel={link.external ? 'noopener noreferrer' : undefined}
+          class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/30 p-5 hover:border-slate-600 transition-colors group"
+        >
+          <div>
+            <p class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-1">
+              {link.label}
+            </p>
+            <p class="text-slate-200 font-medium text-sm">{link.display}</p>
+          </div>
+          <span class="text-sky-400 text-lg group-hover:translate-x-0.5 transition-transform">
+            {link.arrow}
+          </span>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</Base>

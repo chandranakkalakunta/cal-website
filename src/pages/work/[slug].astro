@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Pillars from '../../components/Pillars.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props:  { project },
+  }));
+}
+
+const { project } = Astro.props;
+const {
+  title, tagline, status, problem, pillars,
+  outcome, stack, links,
+  architectureNote, architectureDiagram,
+} = project.data;
+const { Content } = await project.render();
+
+const hasLinks =
+  links && (
+    (links.github && links.github !== 'PLACEHOLDER_GITHUB_URL') ||
+    (links.live   && links.live   !== 'PLACEHOLDER_LIVE_URL')
+  );
+---
+
+<Base title={title} description={tagline}>
+  <article class="mx-auto max-w-4xl px-6 py-20">
+
+    <!-- Breadcrumb + header -->
+    <header class="mb-12">
+      <nav class="flex items-center gap-2 text-sm mb-6">
+        <a href="/work" class="text-slate-500 hover:text-slate-300 transition-colors">Work</a>
+        <span class="text-slate-700">/</span>
+        <span class="text-slate-400">{title}</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-slate-100 leading-tight mb-3">{title}</h1>
+      <p class="text-xl text-slate-400 mb-5">{tagline}</p>
+      <span class="inline-block text-sm font-mono text-sky-400 bg-sky-400/10 border border-sky-400/20 rounded px-3 py-1">
+        {status}
+      </span>
+    </header>
+
+    <!-- Problem -->
+    <section class="mb-12">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-4">
+        The Problem
+      </h2>
+      <p class="text-slate-300 text-lg leading-relaxed">{problem}</p>
+    </section>
+
+    <!-- Four Pillars — visual signature -->
+    <section class="mb-12">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-4">
+        Four Pillars
+      </h2>
+      <Pillars pillars={pillars} />
+    </section>
+
+    <!-- Architecture -->
+    {(architectureNote || architectureDiagram) && (
+      <section class="mb-12">
+        <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-4">
+          Architecture
+        </h2>
+        {architectureDiagram && (
+          <img
+            src={architectureDiagram}
+            alt={`${title} architecture diagram`}
+            class="w-full rounded-lg border border-slate-800 mb-5"
+          />
+        )}
+        {architectureNote && (
+          <p class="text-slate-300 leading-relaxed">{architectureNote}</p>
+        )}
+      </section>
+    )}
+
+    <!-- MDX body -->
+    <section class="mb-12 prose prose-invert prose-slate max-w-none
+      prose-headings:text-slate-100 prose-headings:font-semibold
+      prose-p:text-slate-300 prose-p:leading-relaxed
+      prose-a:text-sky-400 prose-a:no-underline hover:prose-a:underline
+      prose-code:text-sky-300 prose-code:bg-slate-800/60 prose-code:rounded prose-code:px-1 prose-code:py-0.5
+      prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800
+      prose-blockquote:border-l-sky-400 prose-blockquote:text-slate-400
+      prose-strong:text-slate-200
+      prose-li:text-slate-300
+      prose-hr:border-slate-800">
+      <Content />
+    </section>
+
+    <!-- Outcome callout -->
+    <section class="mb-12 rounded-lg border border-slate-700 bg-slate-900/50 p-6">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-4">
+        Outcome
+      </h2>
+      <p class="text-slate-200 leading-relaxed">{outcome}</p>
+    </section>
+
+    <!-- Stack -->
+    <section class="mb-12">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-4">
+        Stack
+      </h2>
+      <div class="flex flex-wrap gap-2">
+        {stack.map(tech => (
+          <span class="text-sm font-mono text-slate-300 bg-slate-800 border border-slate-700 rounded px-3 py-1">
+            {tech}
+          </span>
+        ))}
+      </div>
+    </section>
+
+    <!-- Links (only renders when placeholders have been replaced) -->
+    {hasLinks && (
+      <section>
+        <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-4">
+          Links
+        </h2>
+        <div class="flex flex-wrap gap-4">
+          {links?.github && links.github !== 'PLACEHOLDER_GITHUB_URL' && (
+            <a
+              href={links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm text-sky-400 hover:text-sky-300 border border-sky-400/30 hover:border-sky-400/60 rounded px-4 py-2 transition-colors"
+            >
+              GitHub →
+            </a>
+          )}
+          {links?.live && links.live !== 'PLACEHOLDER_LIVE_URL' && (
+            <a
+              href={links.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm text-sky-400 hover:text-sky-300 border border-sky-400/30 hover:border-sky-400/60 rounded px-4 py-2 transition-colors"
+            >
+              Live →
+            </a>
+          )}
+        </div>
+      </section>
+    )}
+
+  </article>
+</Base>

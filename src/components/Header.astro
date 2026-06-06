@@ -1,0 +1,92 @@
+---
+const navLinks = [
+  { href: '/work',    label: 'Work'    },
+  { href: '/about',   label: 'About'   },
+  { href: '/writing', label: 'Writing' },
+  { href: '/contact', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/90 backdrop-blur-sm">
+
+  <!--
+    Checkbox precedes its siblings so the CSS ~ (general sibling) combinator
+    can target both the main bar and the mobile drawer. No JavaScript needed.
+  -->
+  <input type="checkbox" id="nav-toggle" class="peer sr-only" />
+
+  <!-- Main bar -->
+  <div class="mx-auto max-w-5xl px-6 flex items-center justify-between h-16">
+
+    <a href="/" class="text-slate-100 font-semibold text-lg tracking-tight shrink-0">
+      Chandra <span class="text-sky-400">AI Labs</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-8">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-medium transition-colors',
+            path === link.href || path.startsWith(link.href + '/')
+              ? 'text-slate-100'
+              : 'text-slate-400 hover:text-slate-100',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Hamburger toggle — mobile only, icon state controlled via CSS below -->
+    <label
+      for="nav-toggle"
+      class="hamburger-label md:hidden cursor-pointer p-2 -mr-2 text-slate-400 hover:text-slate-100 transition-colors"
+      aria-label="Toggle navigation"
+    >
+      <svg class="icon-open w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+      <svg class="icon-close w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+      </svg>
+    </label>
+
+  </div>
+
+  <!-- Mobile nav drawer — peer-checked targets this direct sibling of the input -->
+  <nav class="md:hidden hidden peer-checked:block border-t border-slate-800 bg-slate-950 px-6 py-4">
+    <div class="flex flex-col gap-4">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-base font-medium transition-colors',
+            path === link.href || path.startsWith(link.href + '/')
+              ? 'text-slate-100'
+              : 'text-slate-400 hover:text-slate-100',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+
+</header>
+
+<style>
+  /* Default: show hamburger, hide X */
+  .icon-close { display: none; }
+  .icon-open  { display: block; }
+
+  /*
+    When checkbox is checked, swap icons.
+    #nav-toggle ~ div reaches the main bar (sibling div),
+    then descends to the label and its SVG children.
+  */
+  #nav-toggle:checked ~ div .icon-open  { display: none;  }
+  #nav-toggle:checked ~ div .icon-close { display: block; }
+</style>

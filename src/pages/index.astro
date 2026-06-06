@@ -1,0 +1,140 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const featuredProjects = await getCollection(
+  'projects',
+  ({ data }) => data.featured && !data.draft,
+);
+featuredProjects.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<Base title="Home">
+
+  <!-- Hero -->
+  <section class="mx-auto max-w-5xl px-6 pt-24 pb-20">
+    <div class="max-w-3xl">
+      <p class="text-sky-400 text-xs font-mono font-semibold tracking-widest uppercase mb-6">
+        Principal Cloud &amp; AI/ML Architect
+      </p>
+      <h1 class="text-5xl font-bold text-slate-100 leading-tight tracking-tight mb-8">
+        Chandra AI Labs
+      </h1>
+      <p class="text-xl text-slate-300 leading-relaxed mb-10 max-w-2xl">
+        Chandra AI Labs is my working laboratory — where senior architecture
+        judgment meets hands-on experimentation. I pressure-test emerging technology
+        the way production demands: build it, validate it, instrument it, prove it.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a
+          href="/work"
+          class="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+        >
+          View Work
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+        <a
+          href="/writing"
+          class="inline-flex items-center gap-2 border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 font-medium px-5 py-2.5 rounded-md transition-colors text-sm"
+        >
+          Read Writing
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- What I Do band -->
+  <section class="border-y border-slate-800 bg-slate-900/30 py-12">
+    <div class="mx-auto max-w-5xl px-6">
+      <dl class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div>
+          <dt class="text-sky-400 text-xs font-mono font-semibold tracking-widest uppercase mb-2">
+            Cloud Architecture
+          </dt>
+          <dd class="text-slate-400 text-sm leading-relaxed">
+            GCP-native system design — from IAM to infrastructure-as-code,
+            built to survive production.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sky-400 text-xs font-mono font-semibold tracking-widest uppercase mb-2">
+            AI/ML Engineering
+          </dt>
+          <dd class="text-slate-400 text-sm leading-relaxed">
+            End-to-end ML pipelines with drift monitoring, explainability,
+            and real-world validation numbers.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sky-400 text-xs font-mono font-semibold tracking-widest uppercase mb-2">
+            Agentic Systems
+          </dt>
+          <dd class="text-slate-400 text-sm leading-relaxed">
+            LLM-backed agents and RAG pipelines instrumented and governed
+            for enterprise use.
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <section class="mx-auto max-w-5xl px-6 py-20">
+    <div class="flex items-baseline justify-between mb-8">
+      <h2 class="text-2xl font-bold text-slate-100">Featured Work</h2>
+      <a href="/work" class="text-sm text-sky-400 hover:text-sky-300 transition-colors">
+        All projects →
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {featuredProjects.map(project => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- Credentials snapshot -->
+  <section class="border-t border-slate-800 py-12">
+    <div class="mx-auto max-w-5xl px-6">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-5">
+        Credentials
+      </h2>
+      <div class="flex flex-wrap gap-3">
+        {[
+          'GCP Professional Cloud Architect',
+          'GCP Professional ML Engineer',
+          '20 Years Enterprise Systems',
+          'FinTech · Healthcare · Retail',
+        ].map(cred => (
+          <span class="text-sm text-slate-300 border border-slate-700 rounded px-3 py-1">
+            {cred}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA strip -->
+  <section class="border-t border-slate-800 py-16">
+    <div class="mx-auto max-w-5xl px-6 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h2 class="text-xl font-semibold text-slate-100 mb-1">
+          Read the thinking behind the work
+        </h2>
+        <p class="text-slate-400 text-sm">
+          Architecture decisions, production lessons, patterns that hold.
+        </p>
+      </div>
+      <div class="flex gap-6">
+        <a href="/writing" class="text-sm font-medium text-sky-400 hover:text-sky-300 transition-colors">
+          Writing →
+        </a>
+        <a href="/contact" class="text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors">
+          Contact →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Base>

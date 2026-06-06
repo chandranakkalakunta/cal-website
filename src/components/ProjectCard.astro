@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, tagline, status, stack } = project.data;
+const displayStack = stack.slice(0, 4);
+const extraCount = stack.length - 4;
+const statusLabel = status.split(' · ')[0];
+---
+
+<a
+  href={`/work/${project.slug}`}
+  class="group block rounded-lg border border-slate-800 bg-slate-900 p-6 transition-colors hover:border-slate-600"
+>
+  <div class="flex items-start justify-between gap-4 mb-3">
+    <h3 class="text-slate-100 font-semibold text-lg leading-snug group-hover:text-sky-400 transition-colors">
+      {title}
+    </h3>
+    <span class="shrink-0 text-xs font-mono text-sky-400 bg-sky-400/10 border border-sky-400/20 rounded px-2 py-0.5">
+      {statusLabel}
+    </span>
+  </div>
+
+  <p class="text-slate-400 text-sm leading-relaxed mb-5">{tagline}</p>
+
+  <div class="flex flex-wrap gap-2">
+    {displayStack.map(tech => (
+      <span class="text-xs font-mono text-slate-500 bg-slate-800 rounded px-2 py-0.5">
+        {tech}
+      </span>
+    ))}
+    {extraCount > 0 && (
+      <span class="text-xs font-mono text-slate-600 rounded px-2 py-0.5">
+        +{extraCount} more
+      </span>
+    )}
+  </div>
+</a>

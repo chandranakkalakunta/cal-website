@@ -1,0 +1,63 @@
+---
+interface Props {
+  pillars: {
+    iac:         string;
+    security:    string;
+    performance: string;
+    innovation:  string;
+  };
+}
+
+const { pillars } = Astro.props;
+
+const items = [
+  {
+    label: 'Infrastructure as Code',
+    body:  pillars.iac,
+    // computer-desktop (Heroicons outline)
+    icon:  '<path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 0 0 3 3h7.5a3 3 0 0 0 3-3m-16.5 0V9a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3v5.25m0 0a3 3 0 0 1-3 3m-10.5-3h1.5m1.5 0h1.5" />',
+  },
+  {
+    label: 'Security & Governance',
+    body:  pillars.security,
+    // shield-check (Heroicons outline)
+    icon:  '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />',
+  },
+  {
+    label: 'Performance & Optimization',
+    body:  pillars.performance,
+    // chart-bar (Heroicons outline)
+    icon:  '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />',
+  },
+  {
+    label: 'Core Innovation',
+    body:  pillars.innovation,
+    // light-bulb (Heroicons outline)
+    icon:  '<path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />',
+  },
+];
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  {items.map(item => (
+    <div class="rounded-lg border border-slate-800 bg-slate-900/50 p-5">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="flex-shrink-0 w-8 h-8 rounded-md bg-sky-400/10 flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-4 h-4 text-sky-400"
+            set:html={item.icon}
+          />
+        </div>
+        <h4 class="text-xs font-mono font-semibold tracking-widest uppercase text-sky-400">
+          {item.label}
+        </h4>
+      </div>
+      <p class="text-sm text-slate-300 leading-relaxed">{item.body}</p>
+    </div>
+  ))}
+</div>

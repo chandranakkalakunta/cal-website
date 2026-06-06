@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+}
+
+const { article } = Astro.props;
+const { title, date, summary, tags } = article.data;
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+}).format(date);
+---
+
+<a
+  href={`/writing/${article.slug}`}
+  class="group block py-6 border-b border-slate-800 last:border-0 -mx-2 px-2 rounded-md hover:bg-slate-900/40 transition-colors"
+>
+  <div class="flex items-baseline justify-between gap-6 mb-1.5">
+    <h3 class="text-slate-100 font-medium group-hover:text-sky-400 transition-colors">
+      {title}
+    </h3>
+    <time
+      datetime={date.toISOString()}
+      class="shrink-0 text-sm text-slate-500 font-mono"
+    >
+      {formattedDate}
+    </time>
+  </div>
+  <p class="text-slate-400 text-sm leading-relaxed mb-3">{summary}</p>
+  <div class="flex flex-wrap gap-2">
+    {tags.map(tag => (
+      <span class="text-xs font-mono text-slate-600 bg-slate-800/50 rounded px-2 py-0.5">
+        {tag}
+      </span>
+    ))}
+  </div>
+</a>

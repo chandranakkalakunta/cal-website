@@ -1,0 +1,78 @@
+---
+title: "Fraud Detection MLOps"
+tagline: "Production fraud detection on GCP with explainable predictions"
+status: "Live · 1,000 transactions validated"
+featured: true
+draft: false
+order: 1
+problem: >
+  Real-time card fraud detection needs sub-second latency,
+  regulatory-grade explainability, and must handle severe class imbalance
+  (~3.5% fraud) without flagging legitimate customers.
+pillars:
+  iac: >
+    Cloud Run + Vertex AI endpoint, reproducible deploys via CI/CD
+    (11-step pipeline, green).
+  security: >
+    Secret Manager for credentials, least-privilege IAM service accounts,
+    no PII in prediction logs.
+  performance: >
+    p50 518ms, p99 670ms end-to-end; min-instances=1 eliminates cold starts;
+    validated 100% success across 1,000 transactions.
+  innovation: >
+    SHAP explanation on every prediction (regulatory-grade),
+    Platt-calibrated probabilities, 387-feature LightGBM champion
+    (AUC-PR 0.5263) with leakage-aware feature selection.
+architectureNote: >
+  A three-tier design: FastAPI inference service on Cloud Run, backed by a
+  Vertex AI managed endpoint serving the LightGBM champion model, with
+  BigQuery as the prediction audit log. Cloud Build drives the 11-step
+  CI/CD pipeline — build, test, push, deploy, smoke-test — reproducible
+  from a single trigger.
+outcome: >
+  100% success rate across 1,000 validated transactions. p50 latency 518ms,
+  p99 670ms — well under the 1-second production requirement. SHAP
+  explanations satisfy regulatory auditability requirements out of the box.
+stack:
+  - GCP
+  - Cloud Run
+  - Vertex AI
+  - LightGBM
+  - SHAP
+  - BigQuery
+  - Python
+  - FastAPI
+  - Cloud Build
+links:
+  github: "PLACEHOLDER_GITHUB_URL"
+  live: "PLACEHOLDER_LIVE_URL"
+---
+
+## Overview
+
+A production-grade, end-to-end fraud detection system built on Google Cloud
+Platform, serving real-time predictions with sub-second latency and
+regulatory-grade explainability on every response.
+
+The system was designed around the constraints that matter in financial
+services: the model must be fast enough for real-time card authorization,
+explainable enough to satisfy a compliance audit, and calibrated accurately
+enough that its probability outputs can drive downstream business rules.
+
+## Model Development
+
+Class imbalance (~3.5% fraud) is the central challenge. The approach: SMOTE
+applied only to the training fold (never validation or test), time-based
+train/test split to prevent leakage, and SHAP-driven feature selection to
+eliminate any identifier or timestamp proxies from the 387-feature set.
+
+Platt scaling was applied post-training to calibrate raw LightGBM
+probabilities, ensuring that a score of 0.7 actually means 70% fraud
+likelihood — a requirement for threshold-based decisioning.
+
+## CI/CD Pipeline
+
+All 11 pipeline steps are defined in `cloudbuild.yaml` and executed on
+Cloud Build. The pipeline is idempotent — safe to re-run on any commit.
+The smoke test hits the live Cloud Run service URL after deploy, validating
+end-to-end inference before the pipeline goes green.
