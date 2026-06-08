@@ -4,58 +4,92 @@ import Base from '../layouts/Base.astro';
 
 <Base
   title="About"
-  description="Twenty years of enterprise systems, hands-on with the newest cloud and AI tooling."
+  description="25 years of enterprise systems, hands-on with the newest cloud and AI tooling."
 >
   <div class="mx-auto max-w-3xl px-6 py-20">
 
     <h1 class="text-4xl font-bold text-slate-100 mb-10">About</h1>
 
-    <!-- Opening — verbatim from brief -->
     <p class="text-xl text-slate-300 leading-relaxed mb-16 border-l-2 border-sky-400 pl-6">
-      There's a persistent gap in this field: senior architects who no longer
-      build, and AI practitioners who've never run anything in production. I work
-      in the space between — two decades of enterprise systems, hands-on with the
-      newest cloud and AI tooling, turning emerging technology into systems that
-      survive contact with reality.
+      There's a gap in this field: senior architects who no longer build, and AI practitioners
+      who've never run anything in production. I work in the space between — 25 years of
+      enterprise systems, hands-on with the newest cloud and AI tooling, turning new technology
+      into systems that actually hold up in production.
     </p>
 
-    <!-- Twenty-year arc -->
-    <section class="mb-16">
-      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-8">
-        The Arc
+    <section class="mb-16 space-y-6">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500">
+        25 years of building things that had to work
       </h2>
-      <div class="space-y-10">
-        {[
-          {
-            period: 'Now',
-            role:    'Principal Cloud & AI/ML Architect',
-            desc:    'Building production AI systems end-to-end: ML pipelines with explainability, agentic architectures, RAG systems — all instrumented and validated against real workloads on GCP.',
-          },
-          {
-            period: '2010–2024',
-            role:    'Enterprise Cloud Architecture',
-            desc:    'Led cloud migration and platform architecture programs across FinTech, healthcare, and retail. Designed systems for scale, compliance, and operational resilience.',
-          },
-          {
-            period: '2005–2010',
-            role:    'Distributed Systems & Platform Engineering',
-            desc:    'Built the foundational systems layer: distributed data pipelines, service meshes, and the internal platforms that larger applications ran on top of.',
-          },
-        ].map(item => (
-          <div class="grid grid-cols-[7rem,1fr] gap-6 items-start">
-            <span class="font-mono text-sm text-slate-600 text-right pt-0.5 leading-tight">
-              {item.period}
-            </span>
-            <div>
-              <h3 class="text-slate-200 font-semibold mb-1.5">{item.role}</h3>
-              <p class="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <p class="text-slate-400 leading-relaxed">
+        Most of my career has been spent as an architect on systems where failure wasn't an option —
+        telecom networks, multi-tenant SaaS platforms, big-data pipelines. At Motorola and Nokia,
+        I spent fourteen years on high-availability systems for Tier-1 telecom, including
+        configuration management for 4G LTE networks. At Accenture, I led cloud-native engineering
+        and built a 50-person team to deliver a multi-tenant SaaS platform. At Thoughtworks, I took
+        mission-critical applications through resiliency and cloud-migration work.
+      </p>
+      <p class="text-slate-400 leading-relaxed">
+        The thread through all of it is the same: distributed systems, real production constraints,
+        and the discipline of knowing your design has to hold when real traffic and real data arrive.
+        That discipline is what I value most, and it's what I've carried into everything since.
+      </p>
     </section>
 
-    <!-- Certifications -->
+    <section class="mb-16 space-y-6">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500">
+        Retooling for the AI era
+      </h2>
+      <p class="text-slate-400 leading-relaxed">
+        In 2023 I made a deliberate choice — step back and go deep on production AI and machine
+        learning, rather than coast on the skills I already had. It also gave me time for my family,
+        which mattered. I treated it as real work: earning Google Cloud's Professional Cloud Architect
+        and Professional Machine Learning Engineer certifications, and building actual systems instead
+        of tutorials.
+      </p>
+      <p class="text-slate-400 leading-relaxed">
+        I also spent time understanding the industry around the tools — how the chip supply chain,
+        the hyperscalers, the newer specialized clouds, and the MLOps ecosystem fit together.
+        Architecture decisions are better when they're grounded in that reality, not just the
+        technology on its own.
+      </p>
+    </section>
+
+    <section class="mb-16 space-y-6">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500">
+        How I work
+      </h2>
+      <p class="text-slate-400 leading-relaxed">
+        The way I build hasn't changed, even as the tools have. I care about the things that don't
+        show up in a demo — validation, observability, security, and whether a system will still be
+        maintainable in three years. I'd rather ship something smaller that's genuinely
+        production-grade than something flashy that falls over the first time it meets real data.
+      </p>
+      <p class="text-slate-400 leading-relaxed">
+        I think in trade-offs. Every decision costs something, and the job is to be honest about
+        what you're trading and why. I document those calls, question my own assumptions, and I'm
+        happy to be wrong out loud if it gets to a better answer. And I've learned that good
+        engineering judgment is usually plain-spoken — if I can't explain why a design is right in
+        simple terms, I probably don't understand it well enough yet.
+      </p>
+    </section>
+
+    <section class="mb-16 space-y-6">
+      <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500">
+        Where I am now
+      </h2>
+      <p class="text-slate-400 leading-relaxed">
+        These days I build production AI systems on Google Cloud — fraud detection with explainable
+        predictions, enterprise search, agentic architectures — and I write about what I learn along
+        the way. The projects on this site are real: deployed, validated, and documented honestly,
+        including the parts that were hard.
+      </p>
+      <p class="text-slate-400 leading-relaxed">
+        This is my working laboratory. If something here is useful to you, or you'd like to talk
+        about building systems that hold up in production, I'd be glad to hear from you.
+      </p>
+    </section>
+
     <section>
       <h2 class="text-xs font-mono font-semibold tracking-widest uppercase text-slate-500 mb-6">
         Certifications
