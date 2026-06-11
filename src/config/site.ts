@@ -3,7 +3,7 @@
 export const SITE = {
   name: 'Chandra AI Labs',
   owner: 'Chandra Nakkalakunta',
-  title: 'Principal Cloud & AI/ML Architect',
+  title: 'Principal AI/ML & Cloud Architect',
   description:
     'Senior architecture judgment meets hands-on experimentation. Two decades of enterprise systems, hands-on with the newest cloud and AI tooling.',
   email: 'chandra.n@chandraailabs.com',
